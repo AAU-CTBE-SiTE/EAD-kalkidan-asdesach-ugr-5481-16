@@ -11,6 +11,6 @@ public class App {
         Student student = context.getBean("student", Student.class);
 
         System.out.println(student);
-
+        System.out.println(student.getName());
     }
 }
