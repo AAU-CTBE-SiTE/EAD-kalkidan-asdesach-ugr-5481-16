@@ -2,6 +2,7 @@ package com.craft;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -13,19 +14,18 @@ public class Student {
     private String name;
     private int age;
 
-    @Value("101")
-    public void setId(int id) {
+//    public Student() {
+//        System.out.println("Student Constructor Called");
+//    }
+
+    @Autowired
+    public Student(@Value("101") int id,
+                   @Value("John Doe") String name,
+                   @Value("20") int age) {
         this.id = id;
-    }
-
-    @Value("John Doe")
-    public void setName(String name) {
         this.name = name;
-    }
-
-    @Value("20")
-    public void setAge(int age) {
         this.age = age;
+        System.out.println("Student Parameterized Constructor Called");
     }
 
     public void getDetails() {
