@@ -10,19 +10,20 @@ import org.springframework.stereotype.Component;
 @Data
 @ToString
 public class Student {
-    @Value("101")
     private int id;
-
-    @Value("John Doe")
     private String name;
-
-    @Value("20")
     private int age;
 
-//    private String city;
-//    private String country;
-
-    @Autowired
     private Address address;
 
+    @Autowired
+    public Student(@Value("101") int id,
+                   @Value("John Doe") String name,
+                   @Value("20") int age,
+                   Address address) {
+        this.id = id;
+        this.name = name;
+        this.age = age;
+        this.address = address;
+    }
 }
