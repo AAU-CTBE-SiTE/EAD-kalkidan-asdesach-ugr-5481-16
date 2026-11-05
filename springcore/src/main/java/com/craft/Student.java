@@ -2,6 +2,7 @@ package com.craft;
 
 import lombok.Data;
 import lombok.ToString;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +19,10 @@ public class Student {
     @Value("20")
     private int age;
 
-    @Value("Addis")
-    private String city;
+//    private String city;
+//    private String country;
 
-    @Value("Ethiopia")
-    private String country;
+    @Autowired
+    private Address address;
 
 }
