@@ -3,6 +3,7 @@ package com.craft.actormanagement.controller;
 import com.craft.actormanagement.model.Actor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -65,7 +66,7 @@ public class ActorController {
         return ResponseEntity.notFound().build();
     }
 
-    // NEW: PATCH - change only the fields that were sent
+    // PATCH - change only the fields that were sent
     @PatchMapping("/{id}")
     public ResponseEntity<Actor> patchActor(@PathVariable int id, @RequestBody Actor changes) {
         for (Actor actor : actors) {
@@ -78,6 +79,16 @@ public class ActorController {
                 }
                 return ResponseEntity.ok(actor);
             }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // NEW: DELETE - remove an actor
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteActor(@PathVariable int id) {
+        boolean removed = actors.removeIf(actor -> actor.getId() == id);
+        if (removed) {
+            return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
     }
