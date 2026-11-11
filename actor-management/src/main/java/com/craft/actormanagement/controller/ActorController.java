@@ -4,6 +4,7 @@ import com.craft.actormanagement.model.Actor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -51,13 +52,30 @@ public class ActorController {
         return ResponseEntity.status(HttpStatus.CREATED).body(actor);
     }
 
-    // NEW: PUT - replace an existing actor
+    // PUT - replace an existing actor
     @PutMapping("/{id}")
     public ResponseEntity<Actor> updateActor(@PathVariable int id, @RequestBody Actor updated) {
         for (Actor actor : actors) {
             if (actor.getId() == id) {
                 actor.setName(updated.getName());
                 actor.setMovieName(updated.getMovieName());
+                return ResponseEntity.ok(actor);
+            }
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    // NEW: PATCH - change only the fields that were sent
+    @PatchMapping("/{id}")
+    public ResponseEntity<Actor> patchActor(@PathVariable int id, @RequestBody Actor changes) {
+        for (Actor actor : actors) {
+            if (actor.getId() == id) {
+                if (changes.getName() != null) {
+                    actor.setName(changes.getName());
+                }
+                if (changes.getMovieName() != null) {
+                    actor.setMovieName(changes.getMovieName());
+                }
                 return ResponseEntity.ok(actor);
             }
         }
