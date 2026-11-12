@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class TimingAspect {
 
     // Wraps every ActorService method: we decide when the real method runs
-    @Around("execution(* com.craft.actormanagement.service.ActorService.*(..))")
+    @Around("com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()")
     public Object measureTime(ProceedingJoinPoint joinPoint) throws Throwable {
         long start = System.nanoTime();          // code here runs BEFORE the method
         try {

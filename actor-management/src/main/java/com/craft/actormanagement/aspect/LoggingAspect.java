@@ -1,5 +1,6 @@
 package com.craft.actormanagement.aspect;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.AfterThrowing;
@@ -7,35 +8,44 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+
 @Aspect
 @Component
 public class LoggingAspect {
 
-    // Runs BEFORE any method of ActorService
-    @Before("execution(* com.craft.actormanagement.service.ActorService.*(..))")
-    public void logBefore() {
-        System.out.println(">>> [AOP @Before] An ActorService method is about to run");
+    // Runs before EVERY service method; JoinPoint tells us which one and its arguments
+    @Before("com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()")
+    public void logBefore(JoinPoint joinPoint) {
+        System.out.println(">>> [AOP @Before] " + joinPoint.getSignature().getName()
+                + " is about to run with arguments " + Arrays.toString(joinPoint.getArgs()));
     }
 
-    // Runs only if the method returned normally, and receives the returned value
+    // Runs only before the methods that CHANGE data (combined pointcut)
+    @Before("com.craft.actormanagement.aspect.CommonPointcuts.writeMethods()")
+    public void logWrite(JoinPoint joinPoint) {
+        System.out.println(">>> [AOP write-only @Before] " + joinPoint.getSignature().getName()
+                + " is about to CHANGE data");
+    }
+
     @AfterReturning(
-            pointcut = "execution(* com.craft.actormanagement.service.ActorService.*(..))",
+            pointcut = "com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()",
             returning = "result")
-    public void logAfterReturning(Object result) {
-        System.out.println(">>> [AOP @AfterReturning] The method returned: " + result);
+    public void logAfterReturning(JoinPoint joinPoint, Object result) {
+        System.out.println(">>> [AOP @AfterReturning] " + joinPoint.getSignature().getName()
+                + " returned: " + result);
     }
 
-    // Runs only if the method threw an exception, and receives that exception
     @AfterThrowing(
-            pointcut = "execution(* com.craft.actormanagement.service.ActorService.*(..))",
+            pointcut = "com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()",
             throwing = "ex")
-    public void logAfterThrowing(Exception ex) {
-        System.out.println(">>> [AOP @AfterThrowing] The method threw: " + ex.getMessage());
+    public void logAfterThrowing(JoinPoint joinPoint, Exception ex) {
+        System.out.println(">>> [AOP @AfterThrowing] " + joinPoint.getSignature().getName()
+                + " threw: " + ex.getMessage());
     }
 
-    // Runs after the method no matter what (like a finally block)
-    @After("execution(* com.craft.actormanagement.service.ActorService.*(..))")
-    public void logAfter() {
-        System.out.println(">>> [AOP @After] The method has finished");
+    @After("com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()")
+    public void logAfter(JoinPoint joinPoint) {
+        System.out.println(">>> [AOP @After] " + joinPoint.getSignature().getName() + " has finished");
     }
 }
