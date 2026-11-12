@@ -1,5 +1,6 @@
 package com.craft.actormanagement.aspect;
 
+import com.craft.actormanagement.annotation.LogExecutionTime;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -9,16 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class TimingAspect {
 
-    // Wraps every ActorService method: we decide when the real method runs
-    @Around("com.craft.actormanagement.aspect.CommonPointcuts.anyServiceMethod()")
-    public Object measureTime(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.nanoTime();          // code here runs BEFORE the method
+    // Applies only to methods that carry @LogExecutionTime.
+    // The annotation itself is passed in, so we can read its label.
+    @Around("@annotation(logExecutionTime)")
+    public Object measureTime(ProceedingJoinPoint joinPoint, LogExecutionTime logExecutionTime) throws Throwable {
+        long start = System.nanoTime();
         try {
-            return joinPoint.proceed();          // run the real method
-        } finally {                              // code here runs AFTER, even on exceptions
+            return joinPoint.proceed();
+        } finally {
             long micros = (System.nanoTime() - start) / 1000;
-            System.out.println(">>> [AOP @Around] " + joinPoint.getSignature().getName()
-                    + " took " + micros + " microseconds");
+            String label = logExecutionTime.label().isEmpty() ? "" : " (" + logExecutionTime.label() + ")";
+            System.out.println(">>> [AOP @LogExecutionTime] " + joinPoint.getSignature().getName()
+                    + label + " took " + micros + " microseconds");
         }
     }
 }

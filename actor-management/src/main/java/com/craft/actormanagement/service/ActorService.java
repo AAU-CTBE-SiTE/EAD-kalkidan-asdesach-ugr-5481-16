@@ -2,6 +2,7 @@ package com.craft.actormanagement.service;
 
 import com.craft.actormanagement.exception.ActorNotFoundException;
 import com.craft.actormanagement.model.Actor;
+import com.craft.actormanagement.annotation.LogExecutionTime;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,10 +24,12 @@ public class ActorService {
     }
 
     // throws ActorNotFoundException when there is no actor with this id
+    @LogExecutionTime(label = "lookup")
     public Actor getActorById(int id) {
         return findOrThrow(id);
     }
 
+    @LogExecutionTime(label = "insert")
     public Actor createActor(Actor actor) {
         actor.setId(nextId++);
         actors.add(actor);
