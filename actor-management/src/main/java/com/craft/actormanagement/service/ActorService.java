@@ -1,5 +1,6 @@
 package com.craft.actormanagement.service;
 
+import com.craft.actormanagement.exception.ActorNotFoundException;
 import com.craft.actormanagement.model.Actor;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +22,9 @@ public class ActorService {
         return actors;
     }
 
-    // returns null when there is no actor with this id
+    // throws ActorNotFoundException when there is no actor with this id
     public Actor getActorById(int id) {
-        return findById(id);
+        return findOrThrow(id);
     }
 
     public Actor createActor(Actor actor) {
@@ -32,23 +33,17 @@ public class ActorService {
         return actor;
     }
 
-    // replaces name and movieName; returns null when the id does not exist
+    // replaces name and movieName
     public Actor updateActor(int id, Actor updated) {
-        Actor actor = findById(id);
-        if (actor == null) {
-            return null;
-        }
+        Actor actor = findOrThrow(id);
         actor.setName(updated.getName());
         actor.setMovieName(updated.getMovieName());
         return actor;
     }
 
-    // changes only the fields that are not null; returns null when the id does not exist
+    // changes only the fields that are not null
     public Actor patchActor(int id, Actor changes) {
-        Actor actor = findById(id);
-        if (actor == null) {
-            return null;
-        }
+        Actor actor = findOrThrow(id);
         if (changes.getName() != null) {
             actor.setName(changes.getName());
         }
@@ -58,17 +53,17 @@ public class ActorService {
         return actor;
     }
 
-    // returns true when an actor was removed
-    public boolean deleteActor(int id) {
-        return actors.removeIf(actor -> actor.getId() == id);
+    public void deleteActor(int id) {
+        Actor actor = findOrThrow(id);
+        actors.remove(actor);
     }
 
-    private Actor findById(int id) {
+    private Actor findOrThrow(int id) {
         for (Actor actor : actors) {
             if (actor.getId() == id) {
                 return actor;
             }
         }
-        return null;
+        throw new ActorNotFoundException(id);
     }
 }

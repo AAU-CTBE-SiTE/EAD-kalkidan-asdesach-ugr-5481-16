@@ -2,6 +2,7 @@ package com.craft.actormanagement.aspect;
 
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,14 @@ public class LoggingAspect {
             returning = "result")
     public void logAfterReturning(Object result) {
         System.out.println(">>> [AOP @AfterReturning] The method returned: " + result);
+    }
+
+    // Runs only if the method threw an exception, and receives that exception
+    @AfterThrowing(
+            pointcut = "execution(* com.craft.actormanagement.service.ActorService.*(..))",
+            throwing = "ex")
+    public void logAfterThrowing(Exception ex) {
+        System.out.println(">>> [AOP @AfterThrowing] The method threw: " + ex.getMessage());
     }
 
     // Runs after the method no matter what (like a finally block)
