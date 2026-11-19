@@ -1,103 +1,84 @@
-# Lab 1: JDBC Student Database Project
+﻿# Lab 8: Building a RESTful CRUD API
 
-**Lab Assignment 1: Enterprise Application Development**
-**Topic:** Java Database Connectivity (JDBC) with MySQL
+## Project Information
 
-| | |
-|---|---|
-| **Name** | Kalkidan Asdesach |
-| **ID** | UGR/5481/16 |
-| **Stream** | Software Engineering, 4th Year |
-| **Course** | Enterprise Application Development |
-| **University** | Addis Ababa University |
+- **Course:** Enterprise Application Development
+- **Laboratory:** Lab 8
+- **Branch:** lab-8
+- **Project:** Student Management REST API
+- **Technology:** Java 17, Spring Boot, Spring Data JPA, Hibernate, MySQL, Maven
 
----
+## Project Description
 
-## Description
+This laboratory focuses on developing a RESTful CRUD API using Spring Boot, Spring Data JPA, and MySQL.
 
-This lab shows how a Java application talks to a relational database using JDBC. The program connects to a MySQL server, creates a database called `StudentsDB` with a `students` table, and then performs the basic CRUD operations (Create, Read, Update, Delete) plus an aggregate query, all from Java code.
+The application manages student records and provides REST endpoints to create, retrieve, update, and delete student information.
 
-Each task is a separate Java class and a separate Git commit, so the progress of the work can be followed in the commit history.
+## Implemented Features
 
-## Database schema
+The following operations have been implemented and manually tested:
 
-Database: `StudentsDB`
+- Create a student (POST)
+- Retrieve all students (GET)
+- Retrieve a student by ID (GET)
+- Update student information (PUT)
+- Delete a student (DELETE)
 
-Table: `students`
+## Technologies Used
 
-| Column | Type | Notes |
-|---|---|---|
-| `id` | INT | Primary key |
-| `firstname` | VARCHAR(255) | |
-| `lastname` | VARCHAR(255) | |
-| `grade` | INT | |
-
-## Tasks
-
-| Task | Class | Description |
-|---|---|---|
-| 1 | `Task1.java` | Connect to the MySQL server, create the `StudentsDB` database and the `students` table. |
-| 2 | `Task2.java` | Insert one example row, then ten more rows, using a `PreparedStatement`. The table is cleared first so the program can be re-run. |
-| 3 | `Task3.java` | Retrieve and display five rows from the `students` table (`SELECT * FROM students LIMIT 5`). |
-| 4 | `Task4.java` | Update the `firstname` of a student with a given `id`. Prints the row before and after the update. |
-| 5 | `Task5.java` | Delete a student with a given `id`. Prints the number of rows before and after. |
-| 6 | `Task6.java` | Calculate and display the average grade of all students (`SELECT AVG(grade) ...`). |
-
-`Main.java` is a simple connection test that prints `Established Connection`.
-
-### Expected results
-
-- **Task 1:** prints `Established Connection`, `Database StudentsDB ready.` and `Table students ready.`
-- **Task 2:** the table contains 11 rows afterwards.
-- **Task 3:** prints five students, starting with ID 1.
-- **Task 4:** student 1 changes from `John` to `Johnny`.
-- **Task 5:** student 2 is deleted, leaving 10 rows.
-- **Task 6:** with the sample data, the average grade is `83.00`.
-
-Tasks 2, 4 and 5 change the data, so run them in order (1 to 6) for the results above.
-
-## Technologies
-
-- Java 17 (Eclipse Temurin)
+- Java 17
+- Spring Boot
+- Spring Data JPA
+- Hibernate
+- MySQL 8
 - Maven
-- MySQL Server 8.0 and MySQL Workbench 8.0
-- MySQL Connector/J 8.4.0
-- IntelliJ IDEA Community Edition
 - Git and GitHub
+- PowerShell for API testing
 
-## Project structure
+## API Endpoints
 
-```
-EAD-kalkidan-asdesach-ate-5481-16
-├── pom.xml                      Maven configuration (includes the MySQL driver)
-├── config.properties.example    Template for database settings
-├── .gitignore
-└── src/main/java/org/example
-    ├── Main.java                Connection test
-    ├── Task1.java               Create database and table
-    ├── Task2.java               Insert data
-    ├── Task3.java               Retrieve data
-    ├── Task4.java               Update data
-    ├── Task5.java               Delete data
-    └── Task6.java               Average grade
-```
+Base URL: `http://localhost:8080/api/students`
 
-## How to run
+| HTTP Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/students` | Create a student |
+| GET | `/api/students` | Retrieve all students |
+| GET | `/api/students/{id}` | Retrieve a student by ID |
+| PUT | `/api/students/{id}` | Update a student |
+| DELETE | `/api/students/{id}` | Delete a student |
 
-1. Install JDK 17 or higher, Maven (or use IntelliJ's built-in Maven), and MySQL Server 8.0. Make sure the MySQL service is running.
-2. Clone the repository and open it in IntelliJ IDEA:
-```
-   git clone https://github.com/AAU-CTBE-SiTE/EAD-kalkidan-asdesach-ate-5481-16.git
-```
-3. Copy `config.properties.example` to a new file named `config.properties` in the project root, and put in your own MySQL password:
-```
-   db.url=jdbc:mysql://localhost:3306/
-   db.user=root
-   db.password=YOUR_PASSWORD_HERE
-```
-4. Let Maven download the dependencies (IntelliJ does this automatically, or click the Maven reload button).
-5. Run the classes one at a time, in order, from `Task1` to `Task6`, by clicking the green arrow next to `main`.
+## Database Configuration
 
-## Security note
+The application uses MySQL for data persistence.
 
-The database password is **not** stored in the code or in this repository. It is read at run time from `config.properties`, which is listed in `.gitignore` and is never uploaded to GitHub. Only the template `config.properties.example` is included.
+Database connection settings are configured through environment variables:
+
+- `DB_URL`
+- `DB_USERNAME`
+- `DB_PASSWORD`
+
+Default database URL: `jdbc:mysql://localhost:3306/studentdb`
+
+## Development Status
+
+**Status: IN PROGRESS - NOT YET COMPLETED**
+
+The basic CRUD functionality has been implemented and tested successfully using PowerShell.
+
+However, the laboratory project is still under development. Further review, verification, documentation, and completion of the remaining laboratory requirements are pending.
+
+This repository represents the current development progress and should not be considered the final submission.
+
+## Development History
+
+The development process was documented through the following ChatGPT conversation:
+
+[View Lab 8 Development History](https://chatgpt.com/share/6afecc26-e21c-83ea-bb74-134686eea9f6)
+
+## Author
+
+Kalkidan Asdesach
+
+## Note
+
+This README documents the current state of Lab 8. It will be updated as the project progresses and the remaining laboratory requirements are completed.
